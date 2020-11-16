@@ -1,7 +1,7 @@
 #!/bin/bash
 # If you need an interactive shell, remove '-d' option and attach '-it' option.
 
-docker run --gpus all -it \
+docker run --gpus all -d \
  -v $(pwd)/data:/data \
  -v $(pwd)/cache:/cache \
  -v $(pwd)/implModule.py:/implModule.py \
