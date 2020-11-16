@@ -38,7 +38,7 @@ Predicted implicatures will be returned in JSON format, with `predict` field. Fo
 ```
 curl --request POST \
   --header "Content-Type: application/json" \
-  --data '{"query": "I feel vulnerable in this room"} \
+  --data '{"query": "I feel vulnerable in this room"}' \
   localhost:444
 ```
 should return the response of `{"predict": "LowSecurity"}`.
