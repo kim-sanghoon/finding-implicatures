@@ -12,18 +12,18 @@ load_tf_weights_in_t5(model, None, "/data/")
 model.eval()
 
 ret_dict = {
-    'low air quality': 'LowAirQuality',
-    'low humidity': 'LowHumidity',
-    'low brightness': 'LowBrightness',
-    'low noise level': 'LowNoise',
-    'low security': 'LowSecurity',
-    'low temperature': 'LowTemperature',
-    'high air quality': 'HighAirQuality',
-    'high humidity': 'HighHumidity',
-    'high brightness': 'HighBrightness',
-    'high noise level': 'HighNoise',
-    'high security': 'HighSecurity',
-    'high temperature': 'HighTemperature'
+    'too low air quality': 'LowAirQuality',
+    'too low humidity': 'LowHumidity',
+    'too low brightness': 'LowBrightness',
+    'too low noise level': 'LowNoise',
+    'too low security': 'LowSecurity',
+    'too low temperature': 'LowTemperature',
+    'too high air quality': 'HighAirQuality',
+    'too high humidity': 'HighHumidity',
+    'too high brightness': 'HighBrightness',
+    'too high noise level': 'HighNoise',
+    'too high security': 'HighSecurity',
+    'too high temperature': 'HighTemperature'
 }
 
 
@@ -41,8 +41,8 @@ def main():
         return jsonify({'predict': None, 'error': 'Query not found.'})
     
     input_str = req['query']
-    choices_str = "\\n (A) low air quality (B) low humidity (C) low brightness (D) low noise level (E) low security (F) low temperature (G) high air quality (H) high humidity (I) high brightness (J) high noise level (K) high security (L) high temperature"
-    query_str = 'A man said {}. Which of the followings is the problem of the man? '.format(input_str) + choices_str
+    choices_str = "\\n (A) too low air quality (B) too low humidity (C) too low brightness (D) too low noise level (E) too low security (F) too low temperature (G) too high air quality (H) too high humidity (I) too high brightness (J) too high noise level (K) too high security (L) too high temperature"
+    query_str = 'The man felt uncomfortable in this room, and said "{}." Which of the following room conditions made the man uncomfortable? '.format(input_str) + choices_str
 
     ret = run_model(query_str)[0]
 
