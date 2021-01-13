@@ -56,11 +56,12 @@ Here are some sample inputs and outputs.
 | Feeling like someone is here. | LowSecurity |
 | I think the room is too bright now. | HighBrightness |
 | I want to breathe some fresh air. | LowAirQuality |
+| The sound is irritating me. | HighNoise |
 
 ## Limitations
 
 It is surprising that the NLP model works quite well without any fine-tuning.
-However, the application will not properly working with confusing inputs, such as
+However, the application will not properly working with some inputs, such as
 
 - Input: "Where did the sound come from"
     - Expected Output: HighNoise
@@ -68,4 +69,6 @@ However, the application will not properly working with confusing inputs, such a
 - Input: "I feel that I have to wear a mask"
     - Expected Output: LowAirQuality
     - Actual Output: HighSecurity
-
+- Input: "The air is so soggy"
+    - Expected Output: HighHumidity
+    - Actual Output: LowHumidity
