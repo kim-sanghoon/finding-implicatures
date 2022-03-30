@@ -1,15 +1,14 @@
-from transformers import T5Config, T5Tokenizer, T5ForConditionalGeneration
-from transformers.modeling_t5 import load_tf_weights_in_t5
-from flask import Flask, request, jsonify
+import ray
+from ray import serve
+from transformers import T5Tokenizer, T5ForConditionalGeneration
+from starlette.responses import JSONResponse
 
-app = Flask(__name__)
+ray.init(address="auto", namespace="serve")
+serve.start()
 
-base_model = "t5-large"
+base_model = "allenai/unifiedqa-t5-large"
 tokenizer = T5Tokenizer.from_pretrained(base_model)
-model = T5ForConditionalGeneration(T5Config.from_pretrained(base_model))
-
-load_tf_weights_in_t5(model, None, "/data/")
-model.eval()
+model = T5ForConditionalGeneration.from_pretrained(base_model)
 
 ret_dict = {
     'low air quality': 'LowAirQuality',
@@ -27,23 +26,20 @@ ret_dict = {
 }
 
 
-def run_model(input_string, **generator_args):
+def run_model(input_string: str, **generator_args):
     input_ids = tokenizer.encode(input_string, return_tensors="pt")
     res = model.generate(input_ids, **generator_args)
-    return [tokenizer.decode(x) for x in res]
+    return tokenizer.batch_decode(res, skip_special_tokens=True)
 
 
-@app.route('/', methods=['POST'])
-def main():
-    req = request.get_json()
-    
-    if req is None or 'query' not in req:
-        return jsonify({'predict': None, 'error': 'Query not found.'})
-    
-    input_str = req['query']
+@serve.deployment
+def main(request):
+    input_str = request.query_params['query']
     choices_str = "\\n (A) low air quality (B) low humidity (C) low brightness (D) low noise level (E) low security (F) low temperature (G) high air quality (H) high humidity (I) high brightness (J) high noise level (K) high security (L) high temperature"
-    query_str = 'A man said {}. Which of the followings is the problem of the man? '.format(input_str) + choices_str
+    query_str = f"A man said {input_str}. Which of the followings is the problem of the man? {choices_str}"
 
     ret = run_model(query_str)[0]
 
-    return jsonify({'predict': ret_dict[ret]})
+    return JSONResponse({'predict': ret_dict[ret]})
+
+main.deploy()
