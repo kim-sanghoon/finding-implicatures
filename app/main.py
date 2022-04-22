@@ -6,8 +6,8 @@ from app.routers.query import QueryRouter, router as query_router
 
 app = FastAPI()
 
-ray.init(address='auto', namespace='serve')
-serve.start(detached=True)
+ray.init()
+serve.start()
 
 app.include_router(query_router)
 QueryRouter.deploy()

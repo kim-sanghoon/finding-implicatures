@@ -1,0 +1,31 @@
+version: "3.7"
+
+services:
+  app:
+    image: implicature
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: app
+    env_file: .env
+    # environment:
+    #   RAY_ADDRESS: ray:6379
+    ports:
+      - 8000:8000
+      - 8265:8265
+    command:
+      ["bash", "entrypoint.sh"]
+    shm_size: '4gb'
+    mem_limit: '4gb'
+  #   depends_on:
+  #     - ray
+  
+  # ray:
+  #   image: rayproject/ray:latest
+  #   ports:
+  #     - 6379:6379
+  #     - 8265:8265
+  #   shm_size: '2gb'
+  #   command:
+  #     ["ray", "start", "--head", "--port=6379"]
