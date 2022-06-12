@@ -13,7 +13,3 @@ COPY pyproject.toml poetry.lock* ./
 RUN poetry install --no-dev --no-root --no-ansi --no-interaction
 
 COPY ./app ./app
-
-FROM base AS app
-
-COPY entrypoint.sh .env ./
