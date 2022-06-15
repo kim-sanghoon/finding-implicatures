@@ -1,0 +1,18 @@
+version: "3.7"
+
+services:
+  app:
+    image: finding-implicature
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+      target: app
+    ports:
+      - ${PORT}:8000
+      - 8265:8265
+    volumes:
+      - ${CACHE_DIR}:/cache
+    env_file: ../.env
+    shm_size: 4gb
+    command: ./docker/bin/entrypoint.sh
+    restart: always
