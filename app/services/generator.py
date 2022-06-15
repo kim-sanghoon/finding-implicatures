@@ -1,10 +1,11 @@
 from transformers import T5Tokenizer, T5ForConditionalGeneration
+from typing import List
 
 from app.utils.model_strings import make_input, convert_output
 from app.core.settings import settings
 
 class TextGenerator:
-    def run_model(self, input_string: str, **generator_args) -> list[str]:
+    def run_model(self, input_string: str, **generator_args) -> List[str]:
         input_ids = self.tokenizer.encode(input_string, return_tensors="pt")
         res = self.model.generate(input_ids, **generator_args)
         return self.tokenizer.batch_decode(res, skip_special_tokens=True)

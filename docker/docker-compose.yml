@@ -2,24 +2,17 @@ version: "3.7"
 
 services:
   app:
-    image: implicature
+    image: finding-implicature
     build:
       context: ../
       dockerfile: docker/Dockerfile
       target: app
-    env_file: ../.env
     ports:
-      - 8000:8000
+      - ${PORT}:8000
       - 8265:8265
+    volumes:
+      - ${CACHE_DIR}:/cache
+    env_file: ../.env
+    shm_size: 4gb
     command: ./docker/bin/entrypoint.sh
-    # depends_on:
-    #   - ray
-  
-  # ray:
-  #   image: rayproject/ray:latest
-  #   ports:
-  #     - 6379:6379
-  #     - 8265:8265
-  #   shm_size: '2gb'
-  #   command:
-  #     ["ray", "start", "--head", "--port=6379"]
+    restart: always
